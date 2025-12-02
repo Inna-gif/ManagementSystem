@@ -6,11 +6,21 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Swagger (для REST API документації)
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// EF Core – підключення до SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Адмінські креденшли
 builder.Services.AddSingleton(new AdminCredentials());
 
+// MVC (контролери + в'юшки)
+builder.Services.AddControllersWithViews();
+
+// JWT-аутентифікація
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
 var jwtAudience = builder.Configuration["Jwt:Audience"]!;
@@ -35,6 +45,7 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
         };
 
+        // Беремо токен із cookie "AuthToken"
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -52,11 +63,17 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllersWithViews();
-
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+// Обробка помилок + Swagger
+if (app.Environment.IsDevelopment())
+{
+    // Сторінка розробника + Swagger UI
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
 }
@@ -68,6 +85,10 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Маршрути для API-контролерів (ItemsController, ActionsController з [ApiController] і [Route("api/..")])
+app.MapControllers();
+
+// Маршрут для MVC (адмін-панель, логін і CRUD)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auth}/{action=Login}/{id?}");

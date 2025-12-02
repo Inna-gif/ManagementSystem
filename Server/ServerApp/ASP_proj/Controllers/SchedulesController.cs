@@ -15,10 +15,8 @@ namespace ASP_proj.Controllers
             _context = context;
         }
 
-        // GET: /Schedules
         public async Task<IActionResult> Index()
         {
-            // Якщо хочеш бачити дані про водія/маршрут одразу – можна додати Include
             var schedules = await _context.Schedules
                 .Include(s => s.Driver)
                 .Include(s => s.Route)
@@ -27,7 +25,7 @@ namespace ASP_proj.Controllers
             return View(schedules);
         }
 
-        // GET: /Schedules/Details/5
+ 
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -42,13 +40,11 @@ namespace ASP_proj.Controllers
             return View(schedule);
         }
 
-        // GET: /Schedules/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Schedules/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Schedule schedule)
@@ -61,7 +57,6 @@ namespace ASP_proj.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Schedules/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -72,7 +67,6 @@ namespace ASP_proj.Controllers
             return View(schedule);
         }
 
-        // POST: /Schedules/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Schedule schedule)
@@ -87,7 +81,6 @@ namespace ASP_proj.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Schedules/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -102,7 +95,6 @@ namespace ASP_proj.Controllers
             return View(schedule);
         }
 
-        // POST: /Schedules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
