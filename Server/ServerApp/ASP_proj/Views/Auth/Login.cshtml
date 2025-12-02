@@ -1,0 +1,30 @@
+﻿@model ASP_proj.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Вхід адміністратора";
+}
+
+<h2>Вхід адміністратора</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div style="color:red; margin-bottom:10px;">
+        @Model.ErrorMessage
+    </div>
+}
+
+<form action="/auth/login" method="post">
+    @Html.AntiForgeryToken()
+
+    <div style="margin-bottom:10px;">
+        <label for="username">Логін</label><br />
+        <input id="username" name="Username" value="@Model.Username" />
+    </div>
+
+    <div style="margin-bottom:10px;">
+        <label for="password">Пароль</label><br />
+        <input id="password" name="Password" type="password" />
+    </div>
+
+    <button type="submit">Увійти</button>
+</form>

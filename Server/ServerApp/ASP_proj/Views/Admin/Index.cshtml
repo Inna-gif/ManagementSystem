@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Адмін-панель";
+}
+
+<h2>Адмін-панель</h2>
+
+<p>Вітаю, @User.Identity?.Name!</p>
+
+<form action="/auth/logout" method="post" style="margin-top:15px;">
+    @Html.AntiForgeryToken()
+    <button type="submit">Вийти</button>
+</form>
