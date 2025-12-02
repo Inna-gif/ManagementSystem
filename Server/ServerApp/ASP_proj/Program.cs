@@ -14,13 +14,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Адмінські креденшли
+// Адмінські креденшли (для MVC-логіну)
 builder.Services.AddSingleton(new AdminCredentials());
 
 // MVC (контролери + в'юшки)
 builder.Services.AddControllersWithViews();
 
-// JWT-аутентифікація
+// ===== JWT-аутентифікація =====
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
 var jwtAudience = builder.Configuration["Jwt:Audience"]!;
@@ -45,15 +45,26 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
         };
 
-        // Беремо токен із cookie "AuthToken"
+        // Тепер підтримуємо ДВА варіанти:
+        // 1) Authorization: Bearer <token>  (для Postman / MAUI)
+        // 2) cookie AuthToken                 (для MVC-адмінки)
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                var token = context.Request.Cookies["AuthToken"];
-                if (!string.IsNullOrEmpty(token))
+                // Якщо є заголовок Authorization – використовуємо його
+                var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(authHeader))
                 {
-                    context.Token = token;
+                    // JwtBearer сам витягне токен із "Bearer xxx"
+                    return Task.CompletedTask;
+                }
+
+                // Інакше пробуємо взяти токен із cookie AuthToken
+                var cookieToken = context.Request.Cookies["AuthToken"];
+                if (!string.IsNullOrEmpty(cookieToken))
+                {
+                    context.Token = cookieToken;
                 }
 
                 return Task.CompletedTask;
@@ -68,7 +79,6 @@ var app = builder.Build();
 // Обробка помилок + Swagger
 if (app.Environment.IsDevelopment())
 {
-    // Сторінка розробника + Swagger UI
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -79,13 +89,12 @@ else
 }
 
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Маршрути для API-контролерів (ItemsController, ActionsController з [ApiController] і [Route("api/..")])
+// Атрибутивні маршрути для API-контролерів (ItemsController, ActionsController, ApiAuthController)
 app.MapControllers();
 
 // Маршрут для MVC (адмін-панель, логін і CRUD)
