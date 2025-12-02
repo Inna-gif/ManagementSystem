@@ -1,0 +1,44 @@
+﻿@model ASP_proj.Models.Schedule
+
+@{
+    ViewData["Title"] = "Edit Schedule";
+}
+
+<h2>Edit schedule</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input asp-for="ScheduleId" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="DriverId" class="form-label"></label>
+        <input asp-for="DriverId" class="form-control" />
+        <span asp-validation-for="DriverId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RouteId" class="form-label"></label>
+        <input asp-for="RouteId" class="form-control" />
+        <span asp-validation-for="RouteId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DepartureTime" class="form-label"></label>
+        <input asp-for="DepartureTime" type="time" class="form-control" />
+        <span asp-validation-for="DepartureTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/Schedules/Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

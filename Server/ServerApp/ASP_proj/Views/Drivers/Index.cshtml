@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ASP_proj.Models.Driver>
+
+@{
+    ViewData["Title"] = "Drivers";
+}
+
+<h2>Drivers</h2>
+
+<p>
+    <a href="/Drivers/Create" class="btn btn-primary">Create new driver</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Password hash</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model)
+        {
+            <tr>
+                <td>@d.DriverId</td>
+                <td>@d.Name</td>
+                <td>@d.Email</td>
+                <td>@d.PasswordHash</td>
+                <td>
+                    <a href="/Drivers/Details/@d.DriverId" class="btn btn-sm btn-info">Details</a>
+                    <a href="/Drivers/Edit/@d.DriverId" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/Drivers/Delete/@d.DriverId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

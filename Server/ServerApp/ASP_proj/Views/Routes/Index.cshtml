@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ASP_proj.Models.Route>
+
+@{
+    ViewData["Title"] = "Routes";
+}
+
+<h2>Routes</h2>
+
+<p>
+    <a href="/Routes/Create" class="btn btn-primary">Create new route</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Number</th>
+            <th>Start point</th>
+            <th>End point</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.RouteId</td>
+                <td>@r.Number</td>
+                <td>@r.StartPoint</td>
+                <td>@r.EndPoint</td>
+                <td>
+                    <a href="/Routes/Details/@r.RouteId" class="btn btn-sm btn-info">Details</a>
+                    <a href="/Routes/Edit/@r.RouteId" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/Routes/Delete/@r.RouteId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

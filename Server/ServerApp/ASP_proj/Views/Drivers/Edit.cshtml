@@ -1,0 +1,31 @@
+﻿@model ASP_proj.Models.Driver
+
+@{
+    ViewData["Title"] = "Edit driver";
+}
+
+<h2>Edit driver</h2>
+
+<form action="/Drivers/Edit/@Model.DriverId" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="DriverId" value="@Model.DriverId" />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input name="Name" class="form-control" value="@Model.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input name="Email" class="form-control" value="@Model.Email" />
+    </div>
+
+    <div class="mb-3">
+        <label>Password hash</label>
+        <input name="PasswordHash" class="form-control" value="@Model.PasswordHash" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/Drivers/Index" class="btn btn-secondary">Back</a>
+</form>

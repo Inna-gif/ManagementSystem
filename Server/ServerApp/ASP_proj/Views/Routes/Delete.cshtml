@@ -1,0 +1,26 @@
+﻿@model ASP_proj.Models.Route
+
+@{
+    ViewData["Title"] = "Delete route";
+}
+
+<h2>Delete route</h2>
+
+<p>Are you sure you want to delete this route?</p>
+
+<dl class="row">
+    <dt class="col-sm-2">Number</dt>
+    <dd class="col-sm-10">@Model.Number</dd>
+
+    <dt class="col-sm-2">Start</dt>
+    <dd class="col-sm-10">@Model.StartPoint</dd>
+
+    <dt class="col-sm-2">End</dt>
+    <dd class="col-sm-10">@Model.EndPoint</dd>
+</dl>
+
+<form action="/Routes/Delete/@Model.RouteId" method="post">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="/Routes/Index" class="btn btn-secondary">Cancel</a>
+</form>

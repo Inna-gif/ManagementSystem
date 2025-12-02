@@ -1,0 +1,31 @@
+﻿@model ASP_proj.Models.Route
+
+@{
+    ViewData["Title"] = "Edit route";
+}
+
+<h2>Edit route</h2>
+
+<form action="/Routes/Edit/@Model.RouteId" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="RouteId" value="@Model.RouteId" />
+
+    <div class="mb-3">
+        <label>Number</label>
+        <input name="Number" class="form-control" value="@Model.Number" />
+    </div>
+
+    <div class="mb-3">
+        <label>Start point</label>
+        <input name="StartPoint" class="form-control" value="@Model.StartPoint" />
+    </div>
+
+    <div class="mb-3">
+        <label>End point</label>
+        <input name="EndPoint" class="form-control" value="@Model.EndPoint" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/Routes/Index" class="btn btn-secondary">Back</a>
+</form>
